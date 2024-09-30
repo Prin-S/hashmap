@@ -1,7 +1,7 @@
 function createHashMap(loadFactor) {
     let buckets = new Array(16);
-    const bucketsLoadFactor = loadFactor;
     const capacity = buckets.length;
+    const bucketsLoadFactor = loadFactor;
     let numOfStoredKeys = 0;
 
     function hash(key) {
@@ -83,6 +83,7 @@ function createHashMap(loadFactor) {
     function clear() {
         buckets = [];
         buckets = new Array(16);
+        numOfStoredKeys = 0;
 
         return 'All entries have been removed from the hashmap.';
     }
@@ -147,3 +148,18 @@ console.log(newHashMap.entries());
 console.log(newHashMap.remove('Cart'));
 console.log(newHashMap.length());
 console.log(newHashMap.clear());
+
+console.log(newHashMap.set('apple', 'red'));
+console.log(newHashMap.set('banana', 'yellow'));
+console.log(newHashMap.set('carrot', 'orange'));
+console.log(newHashMap.set('dog', 'brown'));
+console.log(newHashMap.set('elephant', 'gray'));
+console.log(newHashMap.set('frog', 'green'));
+console.log(newHashMap.set('grape', 'purple'));
+console.log(newHashMap.set('hat', 'black'));
+console.log(newHashMap.set('ice cream', 'white'));
+console.log(newHashMap.set('jacket', 'blue'));
+console.log(newHashMap.set('kite', 'pink'));
+console.log(newHashMap.set('lion', 'golden'));
+console.log(newHashMap.entries());
+console.log(newHashMap.length());
