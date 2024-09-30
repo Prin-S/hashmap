@@ -1,6 +1,6 @@
 function createHashMap(loadFactor) {
     let buckets = new Array(16);
-    const capacity = buckets.length;
+    let capacity = buckets.length;
     const bucketsLoadFactor = loadFactor;
     let numOfStoredKeys = 0;
 
@@ -9,7 +9,7 @@ function createHashMap(loadFactor) {
         const primeNumber = 31;
         
         for (let i = 0; i < key.length; i++) {
-            hashCode = (primeNumber * hashCode + key.charCodeAt(i)) % 16;
+            hashCode = (primeNumber * hashCode + key.charCodeAt(i)) % capacity;
         }
 
         return hashCode;
@@ -31,9 +31,20 @@ function createHashMap(loadFactor) {
             numOfStoredKeys++;
         }
 
+        if (length() > capacity * bucketsLoadFactor) { // Grow buckets once numOfStoredKeys exceeds capacity * bucketsLoadFactor.
+            growBuckets();
+        }
+
         console.log(`A new key has been added to bucket ${hashCode}. Content of bucket ${hashCode}:`);
 
         return buckets[hashCode];
+    }
+
+    function growBuckets() {
+        let tempArray = entries(); // Create a temporary array containing all key-value pairs in the hashmap.
+        clear(true); // Clear and double the size of the hashmap.
+        tempArray.forEach(element => console.log(set(element[0], element[1]))); // Run set(key, value) for each key-value pair in tempArray to populate the new hashmap.
+        // console.log() is used so that return buckets[hashCode]; in set(key, value) is shown.
     }
 
     function get(key) {
@@ -75,17 +86,21 @@ function createHashMap(loadFactor) {
     }
 
     function length() {
-        console.log('Number of stored keys in the hashmap:');
-
         return numOfStoredKeys;
     }
 
-    function clear() {
+    function clear(grow = false) {
         buckets = [];
-        buckets = new Array(16);
         numOfStoredKeys = 0;
 
-        return 'All entries have been removed from the hashmap.';
+        if (grow) { // If true is passed in,
+            buckets = new Array(capacity * 2); // Double the array size.
+            capacity = buckets.length; // Update capacity.
+        } else {
+            buckets = new Array(capacity);
+
+            return 'All entries have been removed from the hashmap.';
+        }
     }
 
     function keys() {
@@ -130,7 +145,11 @@ function createHashMap(loadFactor) {
         return returnArray;
     }
 
-    return { set, get, has, remove, length, clear, keys, values, entries };
+    function getHashmap() {
+        return buckets;
+    }
+
+    return { set, get, has, remove, length, clear, keys, values, entries, getHashmap };
 }
 
 const newHashMap = createHashMap(0.75);
@@ -147,7 +166,13 @@ console.log(newHashMap.values());
 console.log(newHashMap.entries());
 console.log(newHashMap.remove('Cart'));
 console.log(newHashMap.length());
+console.log(newHashMap.getHashmap());
 console.log(newHashMap.clear());
+console.log(newHashMap.length());
+console.log(newHashMap.getHashmap());
+console.log(newHashMap.keys());
+console.log(newHashMap.values());
+console.log(newHashMap.entries());
 
 console.log(newHashMap.set('apple', 'red'));
 console.log(newHashMap.set('banana', 'yellow'));
@@ -161,5 +186,21 @@ console.log(newHashMap.set('ice cream', 'white'));
 console.log(newHashMap.set('jacket', 'blue'));
 console.log(newHashMap.set('kite', 'pink'));
 console.log(newHashMap.set('lion', 'golden'));
-console.log(newHashMap.entries());
 console.log(newHashMap.length());
+console.log(newHashMap.getHashmap());
+console.log(newHashMap.set('elephant', 'green'));
+console.log(newHashMap.length());
+console.log(newHashMap.getHashmap());
+console.log(newHashMap.set('moon', 'silver'));
+console.log(newHashMap.length());
+console.log(newHashMap.set('Cart', 'test'));
+console.log(newHashMap.set('Card', 'test 2'));
+console.log(newHashMap.length());
+console.log(newHashMap.getHashmap());
+console.log(newHashMap.remove('Cart'));
+console.log(newHashMap.length());
+console.log(newHashMap.getHashmap());
+console.log(newHashMap.set('Cart', 'test'));
+console.log(newHashMap.set('elephant', 'blue'));
+console.log(newHashMap.length());
+console.log(newHashMap.getHashmap());
